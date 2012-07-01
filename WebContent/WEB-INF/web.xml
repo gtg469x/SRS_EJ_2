@@ -104,6 +104,24 @@
 	</servlet>
 	
 	<servlet>
+			<servlet-name>JSPRegistration</servlet-name>
+			<jsp-file>/JSPRegistration.jsp</jsp-file>
+		<init-param>
+			<param-name>weblogicURL</param-name>
+			<param-value>t3://localhost:7001</param-value>
+		</init-param>
+		<init-param>
+			<param-name>jhuDataSource</param-name>
+			<param-value>"jhuDataSource"</param-value>
+		</init-param>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>JSPRegistration</servlet-name>
+		<url-pattern>/JSPRegistration.jsp</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
 		<servlet-name>CoursesServlet</servlet-name>
 		<servlet-class>
 			edu.jhu.JavaEE.caldwell.kristin.courses.CoursesServlet

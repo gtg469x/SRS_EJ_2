@@ -6,8 +6,12 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <%@ page import="java.util.*,java.sql.*,javax.sql.*,org.apache.derby.jdbc.*,javax.naming.*,java.text.*" %>
 <% List<String> courses; %>
-<% String dataSource=session.getAttribute("jhuDataSource").toString();  %>
-<% String weblogicUrl=session.getAttribute("weblogicURL").toString(); %>
+<% String dataSource=(String)session.getAttribute("jhuDataSource");  
+	System.out.println(dataSource);
+%>
+<% String weblogicUrl=(String)session.getAttribute("weblogicURL"); 
+	System.out.println(weblogicUrl);
+%>
 <title>CourseListing</title>
 </head>
 <body bgcolor="#ADD8E6">

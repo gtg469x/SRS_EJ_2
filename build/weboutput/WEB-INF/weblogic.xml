@@ -4,9 +4,16 @@
         <wls:keepgenerated>true</wls:keepgenerated>
         <wls:working-dir>/Users/kristincaldwell/Documents/workspace/.metadata/.plugins/org.eclipse.wst.server.core/tmp1/mydomain/work/SRS_EJ_2</wls:working-dir>
         <wls:debug>true</wls:debug>
+
     </wls:jsp-descriptor>
+	<wls:session-descriptor>
+		<wls:tracking-enabled>true</wls:tracking-enabled>
+		<wls:persistent-store-type>memory</wls:persistent-store-type>
+		<wls:cookie-name>testCookie</wls:cookie-name>
+		<wls:debug-enabled>true</wls:debug-enabled>
+	</wls:session-descriptor>
     <wls:context-root>SRS_EJ_2</wls:context-root>
-    <wls:weblogic-version>9.2</wls:weblogic-version>
+    <wls:weblogic-version>12.1.1</wls:weblogic-version>
 <!--<jsp-descriptor>
 		<jsp-param>
 			keepgenerated

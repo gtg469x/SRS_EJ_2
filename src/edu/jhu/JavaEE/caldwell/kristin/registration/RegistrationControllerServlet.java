@@ -26,19 +26,21 @@ public class RegistrationControllerServlet extends HttpServlet{
 	//	while(e.hasMoreElements()){
 	//		System.out.println(e.nextElement());
 	//	}
-
-       	session.setAttribute("loginAttempts", servletConfig.getInitParameter("loginAttempts"));
+//setAttribute can only be set once, otherwise you must remove the parameter and reset it, you cannot overwrite it with another object reference.  I do not know why this is.  Ask.
+   //    	session.setAttribute("loginAttempts", servletConfig.getInitParameter("loginAttempts"));
   //     	session.setAttribute("loginAttempts", servletConfig.getInitParameter("loginAttempts"));
-       	session.setAttribute("jhuDataSource", servletConfig.getInitParameter("jhuDataSource"));
+   //    	session.setAttribute("jhuDataSource", servletConfig.getInitParameter("jhuDataSource"));
        	/*       	while(servletConfig.getInitParameterNames().hasMoreElements()){
        		System.out.println(servletConfig.getInitParameterNames().nextElement());
        	}*/
-       	session.setAttribute("weblogicURL", servletConfig.getInitParameter("weblogicURL"));
+   //    	session.setAttribute("weblogicURL", servletConfig.getInitParameter("weblogicURL"));
         
         if(request.getParameter("formType").equals("login")){
         	loginAttempt++;
         	//session.setAttribute("initialLoginAttempts", Integer.parseInt(servletConfig.getInitParameter("loginAttempts")));
         	//session.setAttribute("loginAttempt", loginAttempt);
+        	System.out.println("I am in the RegistrationController");
+        	System.out.println(session.getAttribute("loginAttempt"));
         	RequestDispatcher dispatcher = servletContext.getRequestDispatcher("/JSPLogin.jsp");
             dispatcher.forward(request, response);
 
@@ -65,6 +67,24 @@ public class RegistrationControllerServlet extends HttpServlet{
         //	RequestDispatcher dispatcher = request.getRequestDispatcher("/Courses.jsp");
         //	dispatcher.forward(request, response);
         //}
+        
+        else if(request.getParameter("formType").equals("redirectRegister")){
+        	session.setAttribute("registrationFormAttribute", request.getParameter("formType"));
+        	RequestDispatcher dispatcher = request.getRequestDispatcher("/JSPRegistration.jsp");
+        	dispatcher.forward(request, response);
+        }
+        else if(request.getParameter("formType").equals("registrationA")){
+        	session.setAttribute("registrationFormAttribute", request.getParameter("formType"));
+        	RequestDispatcher dispatcher = request.getRequestDispatcher("/JSPRegistration.jsp");
+        	dispatcher.forward(request, response);
+        }
+        else if(request.getParameter("formType").equals("registrationB")){
+        	session.setAttribute("registrationFormAttribute", request.getParameter("formType"));
+        	RequestDispatcher dispatcher = request.getRequestDispatcher("/JSPRegistration.jsp");
+        	dispatcher.forward(request, response);
+        }
+        
+        
         else{
         		
                	

@@ -4,19 +4,16 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-		<jsp:useBean id="loginFail" class="edu.jhu.JavaEE.caldwell.kristin.login.LoginFail" scope="request"/>
+		<jsp:useBean id="studentInfoBean" class="edu.jhu.JavaEE.caldwell.kristin.login.StudentInfoBean" scope="session"/>
 		<!-- <jsp:useBean id="loginSuccessful" class="edu.jhu.JavaEE.caldwell.kristin.login.LoginSuccessful" scope="request"/> -->
 <title>Welcome</title>
 </head>
 	<body bgcolor="#ADD8E6">
-	<h1>
-		<jsp:getProperty name="loginSuccessful" property="firstName"/>
-		<jsp:getProperty name="loginSuccessful" property="lastName"/>
+	<h1> Welcome, 
+		<%=session.getAttribute("storedFirstName") %>
+		<%=session.getAttribute("storedLastName") %>
 	</h1>
-<!--  	<h1>
-		<jsp:getProperty name="loginFail" property="loginFailMessage"/>
-	</h1>
--->
+
 	<p>
 	<form action="RegistrationController" method="POST" accept-charset="utf-8">
 		Select your  next action:

@@ -9,6 +9,7 @@ import java.util.Hashtable;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.servlet.RequestDispatcher;
 
 public class StudentInfoBean {
 	private String userId;
@@ -19,6 +20,8 @@ public class StudentInfoBean {
 	private int loginAttempts;
 	private String weblogicUrl;
 	
+	private boolean registrationSuccessful=false;
+	
 	private String loginName;
 	private String loginPass;
 	private String storedFirstName;
@@ -27,9 +30,17 @@ public class StudentInfoBean {
 	private String uname;
 	private String pass;
 	private String ssn;
+	private String ssn1;
+	private String ssn2;
+	private String ssn3;
 	private String firstName;
 	private String lastName;
 	private String email;
+	
+	private String address;
+	private String city;
+	private String state;
+	private String zip;
 	
 	private boolean validPass;
 	private boolean validUname;
@@ -37,6 +48,14 @@ public class StudentInfoBean {
 	
 	public void setUserId(String userid){
 		this.userId=userid;
+	}
+	
+	public void setWeblogicUrl(String wlurl){
+		weblogicUrl = wlurl;
+	}
+	
+	public void setDataSource(String ds){
+		dataSource = ds;
 	}
 	
 	public void setPassword(String password){
@@ -88,6 +107,14 @@ public class StudentInfoBean {
 		}
 	}
 	
+	public String getStoredFirstName(){
+		return storedFirstName;
+	}
+	
+	public String getStoredLastName(){
+		return storedLastName;
+	}
+	
 	public String getSyntaxValidationString(){
 		validUserName(userId);
 		validPassword(password);
@@ -103,7 +130,7 @@ public class StudentInfoBean {
 		return loginSyntaxInfo;
 	}
 	
-	protected void findUser(){
+	public void findUser(){
 
 		Context cxt = null;
 		Hashtable env = new Hashtable();
@@ -111,19 +138,19 @@ public class StudentInfoBean {
 		env.put(Context.PROVIDER_URL, weblogicUrl);
 		try{
 			cxt = new InitialContext(env);
+			System.out.println(dataSource.toString());
 			javax.sql.DataSource ds = (javax.sql.DataSource)cxt.lookup(dataSource.toString());
 			System.out.println("i have made it past the datasource lookup");
 			Connection conn = ds.getConnection();
 			
 			PreparedStatement stmt = conn.prepareStatement("select FIRST_NAME, LAST_NAME from STUDENT where USERID=? and PASSWORD=?");
-			stmt.setString(1,loginName);
-			stmt.setString(2,loginPass);
+			stmt.setString(1,userId);
+			stmt.setString(2,password);
 			/*	Statement stmt = conn.createStatement();
 			String selectStmt = "select FIRST_NAME, LAST_NAME from STUDENT where USERID="+loginName+" and PASSWORD="+loginPass;
 			System.out.println(selectStmt);
 			*/
 			ResultSet rs = stmt.executeQuery();
-			
 			
 			if(rs.next()){
 				userFound = true;
@@ -179,12 +206,29 @@ public class StudentInfoBean {
 	public void setPass(String pass) {
 		this.pass = pass;
 	}
+	
+	/*
 	public String getSsn() {
 		return ssn;
 	}
-	public void setSsn(String ssn) {
-		this.ssn = ssn;
+	*/
+	
+	public void concatSSN(){
+		ssn = ssn1+ssn2+ssn3;
 	}
+	
+	public void setSsn1(String ssn1) {
+		this.ssn1 = ssn1;
+	}
+	
+	public void setSsn2(String ssn2) {
+		this.ssn2 = ssn2;
+	}
+	
+	public void setSsn3(String ssn3) {
+		this.ssn3 = ssn3;
+	}
+	
 	public String getFirstName() {
 		return firstName;
 	}
@@ -202,6 +246,88 @@ public class StudentInfoBean {
 	}
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public String getZip() {
+		return zip;
+	}
+
+	public void setZip(String zip) {
+		this.zip = zip;
+	}
+	
+	public boolean validateRegistration(){
+		return registrationSuccessful;
+	}
+	
+	public void processRegistration(){
+		try{ 
+			Context cxt = null;
+		    Hashtable env = new Hashtable();
+		    env.put(Context.INITIAL_CONTEXT_FACTORY, "weblogic.jndi.WLInitialContextFactory");
+		    env.put(Context.PROVIDER_URL, weblogicUrl.toString());
+			cxt = new InitialContext(env);
+			javax.sql.DataSource ds = (javax.sql.DataSource)cxt.lookup(dataSource.toString());
+			Connection conn = ds.getConnection();
+			
+
+			PreparedStatement pstmt = conn.prepareStatement("INSERT INTO STUDENT VALUES(?, ?, ?, ?, ?, ?, ?)");
+			System.out.println(this.firstName);
+			pstmt.setString(1, this.firstName);
+			pstmt.setString(2, this.lastName);
+			pstmt.setString(3, this.ssn);
+			pstmt.setString(4, this.email);
+			pstmt.setString(5, this.address+" "+this.city+" "+this.state+" "+this.zip);
+			pstmt.setString(6, this.uname);
+			pstmt.setString(7, this.pass);
+			
+			
+			pstmt.executeUpdate();
+			
+			
+			
+			conn.close();
+			registrationSuccessful=true;
+		}catch(SQLException sqle){
+			System.err.println(sqle);
+		}catch(NamingException ne){
+			System.err.println(ne);
+		}finally{
+        	//lsBean.setFirstName("Welcome to the site, "+this.firstName);
+        	//lsBean.setLastName(rb.getLastName());
+            //request.setAttribute("loginSuccessful", lsBean);
+			//session.setAttribute("storedFirstName", sib.getStoredFirstName());
+			//session.setAttribute("storedLastName", sib.getStoredLastName());
+			//RequestDispatcher dispatcher= request.getRequestDispatcher("/welcome2.jsp");
+			//dispatcher.forward(request,response);
+        	//RequestDispatcher dispatcher = servletContext.getRequestDispatcher("/welcome2.jsp");
+        	//dispatcher.forward(request, response);
+		}
+		
 	}
 	
 	
